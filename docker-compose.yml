@@ -3,7 +3,7 @@ version: '3.8'
 services:
   api:
     build:
-      dockerfile: docker/php/dockerfile
+      dockerfile: docker/php/Dockerfile
     volumes:
       - ./api:/var/www/apiPlatform
       - ./docker/php/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
@@ -50,12 +50,10 @@ services:
       - apiPlatform
 
   web:
-    image: node:20.11.1
+    build:
+      dockerfile: docker/node/Dockerfile
     volumes:
       - ./web:/app
-    working_dir: /app
-    command: npm start
-#    command: tail -f /dev/null
     container_name: apiPlatform_web
     ports:
       - "3000:3000"
