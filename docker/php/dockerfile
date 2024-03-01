@@ -1,0 +1,39 @@
+FROM php:8.3-fpm
+
+# Update package list and install dependencies
+RUN apt-get update && apt-get install -y \
+    git \
+    unzip
+
+# Install PDO and other required PHP extensions
+RUN docker-php-ext-install pdo pdo_mysql mysqli \
+&& apt-get install -y libicu-dev \
+&& docker-php-ext-configure intl \
+&& docker-php-ext-install intl
+
+# Install xDebug (adjust xDebug version as needed)
+RUN pecl install xdebug-3.3.0 \
+    && docker-php-ext-enable xdebug
+
+# Install Composer globally
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+# Install Symfony CLI
+RUN curl -sS https://get.symfony.com/cli/installer | bash \
+    && mv /root/.symfony5/bin/symfony /usr/local/bin/symfony
+
+# Update www-data's UID and GID
+RUN usermod -u 1000 www-data && groupmod -g 1000 www-data
+
+# Set working directory
+WORKDIR /var/www/apiPlatform
+
+# Change ownership of the working directory to www-data
+RUN chown -R www-data:www-data /var/www
+
+# Set www-data as the default user
+USER www-data
+
+# Configure git
+RUN git config --global user.email "your.email@gmail.com" \
+    && git config --global user.name "Your Name"
