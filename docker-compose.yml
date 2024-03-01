@@ -50,10 +50,12 @@ services:
       - apiPlatform
 
   web:
-    build:
-      dockerfile: docker/node/Dockerfile
+    image: node:20.11.1
     volumes:
       - ./web:/app
+    working_dir: /app
+    command: npm start
+    #    command: tail -f /dev/null
     container_name: apiPlatform_web
     ports:
       - "3000:3000"
