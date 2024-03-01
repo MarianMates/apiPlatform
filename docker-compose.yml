@@ -8,7 +8,7 @@ services:
       - ./api:/var/www/apiPlatform
       - ./docker/php/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
     environment:
-      - PHP_IDE_CONFIG=serverName=api.local
+      - PHP_IDE_CONFIG=serverName=localhost
     container_name: apiPlatform_api
     networks:
       - apiPlatform
