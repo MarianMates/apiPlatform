@@ -25,11 +25,23 @@ This docker environment sets up the following containers :
 
 ## Installation
 
+#### Automatic
+
+After cloning the repository, cd into the root folder and run `sh install.sh`. <br>
+
+The backend app is now accessible on http://localhost:8080/ and the frontend app is accessible on http://localhost:3000/. <br>
+Going forward we only need `docker start` or `docker compose up -d`, unless we are doing a fresh install.
+#### Manual 
+
+Edit docker-compose.yml, comment line 57 (**command: npm start**) and uncomment line 58 (**command: tail -f /dev/null**). <br>
 Run `docker compose up -d` to build and start the docker containers. <br>
 Run `docker exec apiPlatform_api composer install` to install ApiPlatform dependencies. <br>
-Run `docker exec apiPlatform_web npm install` to install React dependencies.
+Run `docker exec apiPlatform_web npm install` to install React dependencies. <br>
+Revert the changes to the docker-compose.yml by uncommenting line 57 and commenting back line 58. <br>
+Run `docker compose up -d` to bring up the changes made to the compose file.
 
-The backend app is now accessible on http://localhost:8080/ and the frontend app is accessible on http://localhost:3000/.
+The backend app is now accessible on http://localhost:8080/ and the frontend app is accessible on http://localhost:3000/. <br>
+Going forward we only need `docker start` or `docker compose up -d`, unless we are doing a fresh install.
 
 ###### XDebug
 
