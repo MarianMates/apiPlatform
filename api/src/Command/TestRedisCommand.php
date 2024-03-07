@@ -1,12 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
 namespace App\Command;
+
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Contracts\Cache\CacheInterface;
-#[AsCommand(name: 'app:test-redis')]
+
+#[AsCommand(name: 'app:test-redis', description: 'Test Redis')]
 final class TestRedisCommand extends Command
 {
     public function __construct(private readonly CacheInterface $cache)
