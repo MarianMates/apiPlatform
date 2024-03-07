@@ -1,0 +1,5 @@
+services:
+  test.password_hasher:
+    class: Symfony\Component\PasswordHasher\Hasher\UserPasswordHasher
+    arguments: ['@security.password_hasher_factory']
+    public: true
