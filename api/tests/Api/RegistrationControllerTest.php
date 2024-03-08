@@ -21,8 +21,8 @@ class RegistrationControllerTest extends WebTestCase
         ]));
 
         $this->assertResponseIsSuccessful();
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
-        $this->assertStringContainsString('User test@example.com successfully created', $client->getResponse()->getContent());
+        $this->assertEquals(Response::HTTP_CREATED, $client->getResponse()->getStatusCode());
+        $this->assertStringContainsString('test@example.com', $client->getResponse()->getContent());
 
         // Rollback changes
         $entityManager->getConnection()->rollBack();
@@ -37,16 +37,16 @@ class RegistrationControllerTest extends WebTestCase
             'password' => 'TestPassword123!',
         ]));
 
-        $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
-        $this->assertStringContainsString('Email and password are required', $client->getResponse()->getContent());
+        $this->assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->assertStringContainsString('email: This value should not be blank', $client->getResponse()->getContent());
 
         // Test missing password
         $client->request('POST', '/register', [], [], ['CONTENT_TYPE' => 'application/json'], json_encode([
             'email' => 'test@example.com',
         ]));
 
-        $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
-        $this->assertStringContainsString('Email and password are required', $client->getResponse()->getContent());
+        $this->assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->assertStringContainsString('password: This value should not be blank', $client->getResponse()->getContent());
 
         // Test malformed email
         $client->request('POST', '/register', [], [], ['CONTENT_TYPE' => 'application/json'], json_encode([
@@ -54,7 +54,7 @@ class RegistrationControllerTest extends WebTestCase
             'password' => 'TestPassword123!',
         ]));
 
-        $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
-        $this->assertStringContainsString('Validation error', $client->getResponse()->getContent());
+        $this->assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->assertStringContainsString('is not a valid email', $client->getResponse()->getContent());
     }
 }

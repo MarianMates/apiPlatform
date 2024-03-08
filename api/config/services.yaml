@@ -24,6 +24,6 @@ services:
     # please note that last definitions always *replace* previous ones
 
 # Listeners
-    App\EventListeners\UserPasswordHasherListener:
+    App\EventListener\UserPasswordHasherListener:
         tags:
             - { name: doctrine.event_listener, event: prePersist }

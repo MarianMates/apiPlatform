@@ -1,6 +1,6 @@
 <?php
 
-namespace App\EventListeners;
+namespace App\EventListener;
 
 use Doctrine\ORM\Event\PrePersistEventArgs;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;

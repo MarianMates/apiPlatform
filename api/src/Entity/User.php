@@ -4,12 +4,32 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Post;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+#[ApiResource(
+    operations: [
+        new Post(
+            uriTemplate: '/register',
+            formats: ['json' => ['application/json']],
+            openapiContext: [
+                'summary' => 'Register a new user',
+                'description' => 'Custom registration endpoint for new users.'
+            ],
+            normalizationContext: ['groups' => ['user:read']],
+            denormalizationContext: ['groups' => ['user:write']],
+            validationContext: ['groups' => ['user:register']],
+        )
+    ],
+    formats: ['json' => ['application/json']],
+    normalizationContext: ['groups' => ['user:read']],
+)]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -19,19 +39,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
-    #[Assert\NotBlank]
+    #[Groups(['user:write', 'user:read'])]
+    #[Assert\NotBlank(groups: ['user:register'])]
     #[Assert\Email(
         message: 'The email "{{ value }}" is not a valid email.',
+        groups: ['user:register'],
     )]
     private ?string $email = null;
 
     #[ORM\Column]
+    #[Groups(['user:write'])]
     private array $roles = [];
 
-    /**
-     * @var string The hashed password
-     */
     #[ORM\Column]
+    #[Groups(['user:write'])]
+    #[Assert\NotBlank(groups: ['user:register'])]
     private ?string $password = null;
 
     public function getId(): ?int
